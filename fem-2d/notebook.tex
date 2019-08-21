@@ -141,7 +141,7 @@
     \def\gt{>}
     \def\lt{<}
     % Document parameters
-    \title{fem-2d}
+    \title{Lista 06 - M?todo dos Elementos Finitos em 2D}
     
     
     
@@ -280,9 +280,6 @@
     
 
     
-    \hypertarget{lista-06}{%
-\section{Lista 06}\label{lista-06}}
-
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}1}]:} \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k+kn}{as} \PY{n+nn}{np}
         \PY{k+kn}{import} \PY{n+nn}{matplotlib.pyplot} \PY{k+kn}{as} \PY{n+nn}{plt}
@@ -290,26 +287,24 @@
 \end{Verbatim}
 
 
-    \hypertarget{problema-equauxe7uxe3o-de-conduuxe7uxe3o-de-calor}{%
-\section{Problema: Equação de Condução de
-calor}\label{problema-equauxe7uxe3o-de-conduuxe7uxe3o-de-calor}}
+    \hypertarget{problema-equauxe7uxe3o-de-conduuxe7uxe3o-de-calor-em-duas-dimensuxf5es}{%
+\section{Problema: Equação de Condução de Calor em duas
+dimensões}\label{problema-equauxe7uxe3o-de-conduuxe7uxe3o-de-calor-em-duas-dimensuxf5es}}
 
 \[\frac{\partial^2 T}{\partial x^2}+\frac{\partial^2 T}{\partial y^2}=-\frac{A_0}{k}=-40\]
 
 com \(0\leq x\leq 10\) e \(0\leq y \leq 10\) e com condição de contorno
 
-\[ k\frac{\partial T}{\partial n}=H(T-T_\infty) \Rightarrow T +\frac{k}{H}\frac{\partial T}{\partial n} = T_\infty\]
+\[ k\frac{\partial T}{\partial n}=H(T-T_\infty) \Rightarrow  -k\frac{\partial T}{\partial n} = -HT+HT_\infty\]
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}2}]:} \PY{n}{A0} \PY{o}{=} \PY{l+m+mf}{100.}
         \PY{n}{k} \PY{o}{=} \PY{l+m+mf}{2.5}
         \PY{n}{H0} \PY{o}{=} \PY{l+m+mf}{5.6}
         \PY{n}{Tinf} \PY{o}{=} \PY{l+m+mf}{300.}
-        \PY{n}{a} \PY{o}{=} \PY{l+m+mf}{1.0}
-        \PY{n}{b} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{p}{(}\PY{n}{k}\PY{o}{/}\PY{n}{H0}\PY{p}{)}
         \PY{n}{Hc} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{A0}\PY{o}{/}\PY{n}{k}
-        \PY{n}{Ak} \PY{o}{=} \PY{l+m+mf}{100.}
-        \PY{n}{Fk} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{A0}\PY{o}{/}\PY{n}{k}
+        \PY{n}{Ak} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{H0}
+        \PY{n}{Fk} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{H0}\PY{o}{*}\PY{n}{Tinf}
 \end{Verbatim}
 
 
@@ -342,7 +337,7 @@ com \(0\leq x\leq 10\) e \(0\leq y \leq 10\) e com condição de contorno
                 \PY{n}{dN}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}
             \PY{k}{return} \PY{n}{dN}
         
-        \PY{k}{def} \PY{n+nf}{rigidity}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{dN}\PY{p}{)}\PY{p}{:}
+        \PY{k}{def} \PY{n+nf}{rigidez}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{dN}\PY{p}{,}\PY{n}{k}\PY{p}{)}\PY{p}{:}
             \PY{n}{K} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{n}{dN}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}
             \PY{k}{for} \PY{n}{e} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{n}{dN}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{:}
                 \PY{n}{A} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{n}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{n}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}
@@ -352,23 +347,10 @@ com \(0\leq x\leq 10\) e \(0\leq y \leq 10\) e com condição de contorno
                 
                 \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{:}
                     \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{:}
-                        \PY{n}{aux1} \PY{o}{=} \PY{n}{dN}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{j}\PY{p}{]}\PY{o}{*}\PY{n}{dN}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{i}\PY{p}{]}
-                        \PY{n}{aux2} \PY{o}{=} \PY{n}{dN}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{j}\PY{p}{]}\PY{o}{*}\PY{n}{dN}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{i}\PY{p}{]}
-                        \PY{n}{K}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{n}{i}\PY{p}{,}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{n}{detA} \PY{o}{*} \PY{p}{(}\PY{n}{aux1}\PY{o}{+}\PY{n}{aux2}\PY{p}{)}
-            \PY{k}{return} \PY{o}{\PYZhy{}}\PY{n}{K}
-        
-        \PY{k}{def} \PY{n+nf}{force}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{N}\PY{p}{,}\PY{n}{c}\PY{p}{)}\PY{p}{:}
-            \PY{n}{H} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{n}{N}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}
-            \PY{k}{for} \PY{n}{e} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{n}{N}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{:}
-                \PY{n}{A} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{n}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{n}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                              \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{n}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{n}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                              \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{n}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{n}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{]}\PY{p}{)}
-                \PY{n}{detA} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{det}\PY{p}{(}\PY{n}{A}\PY{p}{)}
-                
-                \PY{n}{H}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{detA} \PY{o}{*} \PY{n}{c} \PY{o}{*} \PY{l+m+mf}{0.5}
-                \PY{n}{H}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{detA} \PY{o}{*} \PY{n}{c} \PY{o}{*} \PY{l+m+mf}{0.5}
-                \PY{n}{H}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{=} \PY{n}{detA} \PY{o}{*} \PY{n}{c} \PY{o}{*} \PY{l+m+mf}{0.5}
-            \PY{k}{return} \PY{n}{H}
+                        \PY{n}{aux1} \PY{o}{=} \PY{n}{dN}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{j}\PY{p}{]} \PY{o}{*} \PY{n}{dN}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{i}\PY{p}{]}
+                        \PY{n}{aux2} \PY{o}{=} \PY{n}{dN}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{j}\PY{p}{]} \PY{o}{*} \PY{n}{dN}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{i}\PY{p}{]}
+                        \PY{n}{K}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{n}{i}\PY{p}{,}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mf}{0.5}\PY{o}{*}\PY{n}{detA}\PY{p}{)} \PY{o}{*} \PY{n}{k} \PY{o}{*} \PY{p}{(}\PY{n}{aux1}\PY{o}{+}\PY{n}{aux2}\PY{p}{)}
+            \PY{k}{return} \PY{n}{K}
         
         \PY{k}{def} \PY{n+nf}{calcIntegral}\PY{p}{(}\PY{n}{y}\PY{p}{,}\PY{n}{dx}\PY{p}{)}\PY{p}{:}
             \PY{n}{aux} \PY{o}{=} \PY{n}{y}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{*} \PY{n}{dx}
@@ -382,7 +364,8 @@ com \(0\leq x\leq 10\) e \(0\leq y \leq 10\) e com condição de contorno
 \section{Geometria}\label{geometria}}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}4}]:} \PY{n}{nx}\PY{p}{,} \PY{n}{ny} \PY{o}{=} \PY{l+m+mi}{30}\PY{p}{,} \PY{l+m+mi}{30}
+{\color{incolor}In [{\color{incolor}4}]:} \PY{n}{nx}\PY{p}{,} \PY{n}{ny} \PY{o}{=} \PY{l+m+mi}{100}\PY{p}{,} \PY{l+m+mi}{100}
+        
         \PY{n}{N\PYZus{}eleme} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{*} \PY{p}{(}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{n}{ny}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
         \PY{n}{N\PYZus{}nodes} \PY{o}{=} \PY{n}{nx} \PY{o}{*} \PY{n}{ny}
         \PY{n}{N\PYZus{}quad} \PY{o}{=} \PY{n}{N\PYZus{}eleme} \PY{o}{/} \PY{l+m+mi}{2}
@@ -420,6 +403,7 @@ com \(0\leq x\leq 10\) e \(0\leq y \leq 10\) e com condição de contorno
         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
         
         \PY{n}{POS} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{n}{N\PYZus{}eleme}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+        
         \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{n}{ny}\PY{p}{)}\PY{p}{:}
             \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{n}{nx}\PY{p}{)}\PY{p}{:}
                 \PY{n}{POS}\PY{p}{[}\PY{n}{i}\PY{o}{+}\PY{p}{(}\PY{n}{j}\PY{o}{*}\PY{n}{nx}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{n}{i}\PY{p}{]}
@@ -430,6 +414,7 @@ com \(0\leq x\leq 10\) e \(0\leq y \leq 10\) e com condição de contorno
         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
         
         \PY{n}{CON} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{n}{N\PYZus{}eleme}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}
+        
         \PY{k}{for} \PY{n}{e} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{n}{N\PYZus{}eleme}\PY{p}{)}\PY{p}{:}
             \PY{n}{CON}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{p}{(}\PY{n}{POS}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{==}\PY{n}{n}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZam{}}\PY{p}{(}\PY{n}{POS}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{==}\PY{n}{n}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
             \PY{n}{CON}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{p}{(}\PY{n}{POS}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{==}\PY{n}{n}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZam{}}\PY{p}{(}\PY{n}{POS}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{==}\PY{n}{n}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
@@ -439,7 +424,7 @@ com \(0\leq x\leq 10\) e \(0\leq y \leq 10\) e com condição de contorno
         \PY{c+c1}{\PYZsh{} [KL] Matriz de rigidez local     }
         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
         
-        \PY{n}{KL} \PY{o}{=} \PY{n}{rigidity}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{dN}\PY{p}{)}
+        \PY{n}{KL} \PY{o}{=} \PY{n}{rigidez}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{dN}\PY{p}{,}\PY{n}{k}\PY{p}{)}
         
         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
         \PY{c+c1}{\PYZsh{} [FL] Vetor de carga local }
@@ -459,9 +444,9 @@ com \(0\leq x\leq 10\) e \(0\leq y \leq 10\) e com condição de contorno
         
         \PY{n}{FL} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{n}{N\PYZus{}eleme}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}
         \PY{k}{for} \PY{n}{e} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{n}{N\PYZus{}eleme}\PY{p}{)}\PY{p}{:}
-            \PY{n}{FL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{Hc} \PY{o}{*} \PY{p}{(}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)} \PY{o}{*} \PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}
-            \PY{n}{FL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{Hc} \PY{o}{*} \PY{p}{(}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)} \PY{o}{*} \PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}
-            \PY{n}{FL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{=} \PY{n}{Hc} \PY{o}{*} \PY{p}{(}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)} \PY{o}{*} \PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}
+            \PY{n}{FL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{Hc} \PY{o}{*} \PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{*} \PY{p}{(}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{p}{(}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{+}\PY{p}{(}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+            \PY{n}{FL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{Hc} \PY{o}{*} \PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{*} \PY{p}{(}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{p}{(}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{+}\PY{p}{(}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+            \PY{n}{FL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{=} \PY{n}{Hc} \PY{o}{*} \PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{*} \PY{p}{(}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{p}{(}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{+}\PY{p}{(}\PY{n}{N}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{CL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -469,90 +454,72 @@ com \(0\leq x\leq 10\) e \(0\leq y \leq 10\) e com condição de contorno
 \section{Elementos de Fronteira}\label{elementos-de-fronteira}}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}16}]:} \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
-         \PY{c+c1}{\PYZsh{} [POF] Posição dos elementos de fronteira}
-         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
-         
-         \PY{n}{POF} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{p}{(}\PY{p}{(}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{+}\PY{p}{(}\PY{p}{(}\PY{n}{ny}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
-         \PY{n}{POF}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-         \PY{n}{POF}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
-         \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
-         \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{p}{:}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
-         \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
-         \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{+}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{:}\PY{l+m+mi}{0}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
-         \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{+}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-         \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{+}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-         
-         \PY{n}{POF}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{yy}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-         \PY{n}{POF}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{yy}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-         \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{yy}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-         \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{p}{:}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{yy}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
-         \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{yy}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
-         \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{+}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{yy}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
-         \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{+}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{yy}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
-         \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{+}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{yy}\PY{p}{[}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{:}\PY{l+m+mi}{0}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
-         
-         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
-         \PY{c+c1}{\PYZsh{} [COF]  Matriz de conectividade entre os pontos de fronteira}
-         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
-         
-         \PY{n}{COF} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{p}{(}\PY{p}{(}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{+}\PY{p}{(}\PY{p}{(}\PY{n}{ny}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
-         \PY{k}{for} \PY{n}{e} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{n}{N\PYZus{}front}\PY{p}{)}\PY{p}{:}
-             \PY{n}{cx} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{p}{(}\PY{n}{POS}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{==}\PY{n}{POF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZam{}}\PY{p}{(}\PY{n}{POS}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{==}\PY{n}{POF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-             \PY{k}{try}\PY{p}{:}
-                 \PY{n}{cy} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{p}{(}\PY{n}{POS}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{==}\PY{n}{POF}\PY{p}{[}\PY{n}{e}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZam{}}\PY{p}{(}\PY{n}{POS}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{==}\PY{n}{POF}\PY{p}{[}\PY{n}{e}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-             \PY{k}{except}\PY{p}{:}
-                 \PY{n}{cy} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{p}{(}\PY{n}{POS}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{==}\PY{n}{POF}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZam{}}\PY{p}{(}\PY{n}{POS}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{==}\PY{n}{POF}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-             \PY{n}{COF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{cx}\PY{p}{)}
-             \PY{n}{COF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{cy}\PY{p}{)}
-             
-         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}    }
-         \PY{c+c1}{\PYZsh{} [KF] Matriz de Rigidez para os elementos de Fronteira}
-         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
-         
-         \PY{n}{KF} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{n}{N\PYZus{}front}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
-         
-         \PY{n}{dx} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-         \PY{n}{dx2} \PY{o}{=} \PY{p}{(}\PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
-         \PY{n}{dy2} \PY{o}{=} \PY{p}{(}\PY{n}{yy}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{yy}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
-         \PY{n}{s} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{dx2}\PY{o}{+}\PY{n}{dy2}\PY{p}{)}
-         \PY{n}{zeta} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{l+m+mi}{1001}\PY{p}{)}
-         
-         \PY{n}{B0} \PY{o}{=} \PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{p}{(}\PY{n}{zeta}\PY{o}{/}\PY{n}{s}\PY{p}{)}
-         \PY{n}{B1} \PY{o}{=} \PY{n}{zeta} \PY{o}{/} \PY{n}{s}
-         
-         \PY{k}{for} \PY{n}{e} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{n}{N\PYZus{}front}\PY{p}{)}\PY{p}{:}
-             \PY{n}{KF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{Ak} \PY{o}{*} \PY{n}{calcIntegral}\PY{p}{(}\PY{n}{B0}\PY{o}{*}\PY{n}{B0}\PY{p}{,}\PY{n}{zeta}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{zeta}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} 
-             \PY{n}{KF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{Ak} \PY{o}{*} \PY{n}{calcIntegral}\PY{p}{(}\PY{n}{B0}\PY{o}{*}\PY{n}{B1}\PY{p}{,}\PY{n}{zeta}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{zeta}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
-             \PY{n}{KF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{Ak} \PY{o}{*} \PY{n}{calcIntegral}\PY{p}{(}\PY{n}{B1}\PY{o}{*}\PY{n}{B0}\PY{p}{,}\PY{n}{zeta}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{zeta}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
-             \PY{n}{KF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{Ak} \PY{o}{*} \PY{n}{calcIntegral}\PY{p}{(}\PY{n}{B1}\PY{o}{*}\PY{n}{B1}\PY{p}{,}\PY{n}{zeta}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{zeta}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
-             
-         \PY{c+c1}{\PYZsh{} Condição de contorno}
-         \PY{n}{qn} \PY{o}{=} \PY{p}{(}\PY{n}{H0}\PY{o}{/}\PY{n}{k}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{Tinf}\PY{p}{)}
-         \PY{n}{KF} \PY{o}{=} \PY{n}{KF}  \PY{o}{+} \PY{n}{qn}
-         \PY{c+c1}{\PYZsh{} KF = KF*\PYZhy{}1}
-         
-         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
-         \PY{c+c1}{\PYZsh{} [FCL] Vetor de carga dos elementos de fronteira}
-         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
-         
-         \PY{n}{CF} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{n}{N\PYZus{}front}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
-         
-         \PY{k}{for} \PY{n}{e} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{n}{N\PYZus{}front}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
-             \PY{n}{CF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{p}{(}\PY{n}{POF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{n}{POF}\PY{p}{[}\PY{n}{e}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
-             \PY{n}{CF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{p}{(}\PY{n}{POF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{+}\PY{n}{POF}\PY{p}{[}\PY{n}{e}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
-         \PY{n}{CF}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{p}{(}\PY{n}{POF}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{+}\PY{n}{POF}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
-         \PY{n}{CF}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{p}{(}\PY{n}{POF}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{+}\PY{n}{POF}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
-             
-         \PY{n}{FCL} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{n}{N\PYZus{}front}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
-         
-         \PY{k}{for} \PY{n}{e} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{n}{N\PYZus{}front}\PY{p}{)}\PY{p}{:}
-             \PY{n}{FCL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{Fk} \PY{o}{*} \PY{n}{calcIntegral}\PY{p}{(}\PY{n}{B0}\PY{p}{,}\PY{n}{zeta}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{zeta}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} 
-             \PY{n}{FCL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{Fk} \PY{o}{*} \PY{n}{calcIntegral}\PY{p}{(}\PY{n}{B1}\PY{p}{,}\PY{n}{zeta}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{zeta}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} 
-         
-         \PY{c+c1}{\PYZsh{} Condição de contorno}
-         \PY{n}{FCL} \PY{o}{=} \PY{n}{FCL} \PY{o}{+} \PY{n}{Tinf}
-         \PY{c+c1}{\PYZsh{} FCL = FCL*0+Tinf}
+{\color{incolor}In [{\color{incolor}6}]:} \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
+        \PY{c+c1}{\PYZsh{} [POF] Posição dos elementos de fronteira}
+        \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
+        
+        \PY{n}{POF} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{n}{N\PYZus{}front}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+        
+        \PY{n}{POF}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+        \PY{n}{POF}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+        \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+        \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{p}{:}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+        \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+        \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{+}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{:}\PY{l+m+mi}{0}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+        \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{+}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+        \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{+}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+        
+        \PY{n}{POF}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{yy}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+        \PY{n}{POF}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{yy}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+        \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{yy}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+        \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{p}{:}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{yy}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+        \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{yy}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+        \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{+}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{yy}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+        \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{+}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{yy}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+        \PY{n}{POF}\PY{p}{[}\PY{n}{nx}\PY{o}{+}\PY{n}{ny}\PY{o}{+}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{yy}\PY{p}{[}\PY{n}{nx}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{:}\PY{l+m+mi}{0}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+        
+        \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
+        \PY{c+c1}{\PYZsh{} [COF]  Matriz de conectividade entre os pontos de fronteira}
+        \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
+        
+        \PY{n}{COF} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{n}{N\PYZus{}front}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+        \PY{k}{for} \PY{n}{e} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{n}{N\PYZus{}front}\PY{p}{)}\PY{p}{:}
+            \PY{n}{cx} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{p}{(}\PY{n}{POS}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{==}\PY{n}{POF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZam{}}\PY{p}{(}\PY{n}{POS}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{==}\PY{n}{POF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+            \PY{k}{try}\PY{p}{:}
+                \PY{n}{cy} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{p}{(}\PY{n}{POS}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{==}\PY{n}{POF}\PY{p}{[}\PY{n}{e}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZam{}}\PY{p}{(}\PY{n}{POS}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{==}\PY{n}{POF}\PY{p}{[}\PY{n}{e}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+            \PY{k}{except}\PY{p}{:}
+                \PY{n}{cy} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{p}{(}\PY{n}{POS}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{==}\PY{n}{POF}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{\PYZam{}}\PY{p}{(}\PY{n}{POS}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{==}\PY{n}{POF}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+            \PY{n}{COF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{cx}\PY{p}{)}
+            \PY{n}{COF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{cy}\PY{p}{)}
+            
+        \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}    }
+        \PY{c+c1}{\PYZsh{} [KF] Matriz de Rigidez para os elementos de Fronteira}
+        \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
+        
+        \PY{n}{KF} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{n}{N\PYZus{}front}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+        
+        \PY{n}{dx} \PY{o}{=} \PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+        \PY{n}{dx2} \PY{o}{=} \PY{p}{(}\PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+        \PY{n}{s} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{dx2}\PY{p}{)}
+        \PY{n}{xi} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{xx}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{l+m+mi}{11}\PY{p}{)}
+        \PY{n}{dxi} \PY{o}{=} \PY{n}{xi}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{xi}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+        \PY{n}{Bn} \PY{o}{=} \PY{p}{(}\PY{n}{xi}\PY{o}{/}\PY{n}{s}\PY{p}{)}
+        
+        \PY{k}{for} \PY{n}{e} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{n}{N\PYZus{}front}\PY{p}{)}\PY{p}{:}
+            \PY{n}{KF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{Ak} \PY{o}{*} \PY{n}{calcIntegral}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{Bn}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{Bn}\PY{p}{)}\PY{p}{,}\PY{n}{dxi}\PY{p}{)} 
+            \PY{n}{KF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{Ak} \PY{o}{*} \PY{n}{calcIntegral}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{Bn}\PY{p}{)}\PY{o}{*}\PY{n}{Bn}\PY{p}{,}\PY{n}{dxi}\PY{p}{)}
+            \PY{n}{KF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{Ak} \PY{o}{*} \PY{n}{calcIntegral}\PY{p}{(}\PY{n}{Bn}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{Bn}\PY{p}{)}\PY{p}{,}\PY{n}{dxi}\PY{p}{)}
+            \PY{n}{KF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{Ak} \PY{o}{*} \PY{n}{calcIntegral}\PY{p}{(}\PY{n}{Bn}\PY{o}{*}\PY{n}{Bn}\PY{p}{,}\PY{n}{dxi}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
+        \PY{c+c1}{\PYZsh{} [FCL] Vetor de carga dos elementos de fronteira}
+        \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
+            
+        \PY{n}{FCL} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{n}{N\PYZus{}front}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+        
+        \PY{k}{for} \PY{n}{e} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{n}{N\PYZus{}front}\PY{p}{)}\PY{p}{:}
+            \PY{n}{FCL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{Fk} \PY{o}{*} \PY{n}{calcIntegral}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{Bn}\PY{p}{)}\PY{p}{,}\PY{n}{dxi}\PY{p}{)} 
+            \PY{n}{FCL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{Fk} \PY{o}{*} \PY{n}{calcIntegral}\PY{p}{(}\PY{n}{Bn}\PY{p}{,}\PY{n}{dxi}\PY{p}{)} 
 \end{Verbatim}
 
 
@@ -560,49 +527,47 @@ com \(0\leq x\leq 10\) e \(0\leq y \leq 10\) e com condição de contorno
 \section{Matriz Global}\label{matriz-global}}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}17}]:} \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
-         \PY{c+c1}{\PYZsh{} [K] Matriz de rigidez global }
-         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
-         
-         \PY{n}{K} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{n}{N\PYZus{}nodes}\PY{p}{,}\PY{n}{N\PYZus{}nodes}\PY{p}{)}\PY{p}{)}
-         
-         \PY{n}{h} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{N\PYZus{}nodes}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{} Elementos locais}
-         \PY{k}{for} \PY{n}{e} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{n}{N\PYZus{}eleme}\PY{p}{)}\PY{p}{:}
-             \PY{n}{cont0} \PY{o}{=} \PY{l+m+mi}{0}
-             \PY{k}{for} \PY{n}{node\PYZus{}x} \PY{o+ow}{in} \PY{n}{CON}\PY{p}{[}\PY{n}{e}\PY{p}{]}\PY{p}{:}
-                 \PY{n}{cont1} \PY{o}{=} \PY{l+m+mi}{0}
-                 \PY{n}{aux} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{node\PYZus{}x}\PY{p}{)}
-                 \PY{n}{h}\PY{p}{[}\PY{n}{aux}\PY{p}{]} \PY{o}{=} \PY{n}{h}\PY{p}{[}\PY{n}{aux}\PY{p}{]} \PY{o}{+} \PY{n}{FL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{n}{cont0}\PY{p}{]}
-                 \PY{k}{for} \PY{n}{node\PYZus{}y} \PY{o+ow}{in} \PY{n}{CON}\PY{p}{[}\PY{n}{e}\PY{p}{]}\PY{p}{:}
-                     \PY{n}{i}\PY{p}{,}\PY{n}{j} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{node\PYZus{}x}\PY{p}{)}\PY{p}{,}\PY{n+nb}{int}\PY{p}{(}\PY{n}{node\PYZus{}y}\PY{p}{)}
-                     \PY{n}{K}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{K}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{n}{j}\PY{p}{]} \PY{o}{+} \PY{n}{KL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{n}{cont0}\PY{p}{,}\PY{n}{cont1}\PY{p}{]}
-                     \PY{n}{cont1} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
-                 \PY{n}{cont0} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
-                 
-         \PY{n}{KBK} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{n}{K}\PY{p}{)}
-                 
-         \PY{n}{f} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{N\PYZus{}nodes}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{} Elementos de fronteira}
-         \PY{k}{for} \PY{n}{e} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{n}{N\PYZus{}front}\PY{p}{)}\PY{p}{:}
-             \PY{n}{cont0} \PY{o}{=} \PY{l+m+mi}{0}
-             \PY{k}{for} \PY{n}{node\PYZus{}x} \PY{o+ow}{in} \PY{n}{COF}\PY{p}{[}\PY{n}{e}\PY{p}{]}\PY{p}{:}
-                 \PY{n}{cont1} \PY{o}{=} \PY{l+m+mi}{0}
-                 \PY{n}{aux} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{node\PYZus{}x}\PY{p}{)}
-                 \PY{n}{f}\PY{p}{[}\PY{n}{aux}\PY{p}{]} \PY{o}{=} \PY{n}{f}\PY{p}{[}\PY{n}{aux}\PY{p}{]} \PY{o}{+} \PY{n}{COF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{n}{cont0}\PY{p}{]}
-                 \PY{k}{for} \PY{n}{node\PYZus{}y} \PY{o+ow}{in} \PY{n}{COF}\PY{p}{[}\PY{n}{e}\PY{p}{]}\PY{p}{:}
-                     \PY{n}{i}\PY{p}{,}\PY{n}{j} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{node\PYZus{}x}\PY{p}{)}\PY{p}{,}\PY{n+nb}{int}\PY{p}{(}\PY{n}{node\PYZus{}y}\PY{p}{)}
-                     \PY{n}{K}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{K}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{n}{j}\PY{p}{]} \PY{o}{+} \PY{n}{KF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{n}{cont0}\PY{p}{,}\PY{n}{cont1}\PY{p}{]}
-                     \PY{n}{cont1} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
-                 \PY{n}{cont0} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
-         
-         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
-         \PY{c+c1}{\PYZsh{} [H] Vetor de carga global}
-         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
-         
-         \PY{n}{H} \PY{o}{=} \PY{n}{h} \PY{o}{+} \PY{n}{f}
+{\color{incolor}In [{\color{incolor}7}]:} \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
+        \PY{c+c1}{\PYZsh{} [K] Matriz de rigidez global }
+        \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
+        
+        \PY{n}{K} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{n}{N\PYZus{}nodes}\PY{p}{,}\PY{n}{N\PYZus{}nodes}\PY{p}{)}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} Elementos interiores}
+        \PY{n}{h} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{N\PYZus{}nodes}\PY{p}{)}
+        
+        \PY{k}{for} \PY{n}{e} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{n}{N\PYZus{}eleme}\PY{p}{)}\PY{p}{:}
+            \PY{n}{cont0} \PY{o}{=} \PY{l+m+mi}{0}
+            \PY{k}{for} \PY{n}{node\PYZus{}x} \PY{o+ow}{in} \PY{n}{CON}\PY{p}{[}\PY{n}{e}\PY{p}{]}\PY{p}{:}
+                \PY{n}{cont1} \PY{o}{=} \PY{l+m+mi}{0}
+                \PY{n}{aux} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{node\PYZus{}x}\PY{p}{)}
+                \PY{n}{h}\PY{p}{[}\PY{n}{aux}\PY{p}{]} \PY{o}{=} \PY{n}{h}\PY{p}{[}\PY{n}{aux}\PY{p}{]} \PY{o}{+} \PY{n}{FL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{n}{cont0}\PY{p}{]}
+                \PY{k}{for} \PY{n}{node\PYZus{}y} \PY{o+ow}{in} \PY{n}{CON}\PY{p}{[}\PY{n}{e}\PY{p}{]}\PY{p}{:}
+                    \PY{n}{i}\PY{p}{,}\PY{n}{j} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{node\PYZus{}x}\PY{p}{)}\PY{p}{,}\PY{n+nb}{int}\PY{p}{(}\PY{n}{node\PYZus{}y}\PY{p}{)}
+                    \PY{n}{K}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{K}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{n}{j}\PY{p}{]} \PY{o}{+} \PY{n}{KL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{n}{cont0}\PY{p}{,}\PY{n}{cont1}\PY{p}{]}
+                    \PY{n}{cont1} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+                \PY{n}{cont0} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+        
+        \PY{c+c1}{\PYZsh{} Elementos de fronteira}
+        \PY{n}{f} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{N\PYZus{}nodes}\PY{p}{)}
+        
+        \PY{k}{for} \PY{n}{e} \PY{o+ow}{in} \PY{n+nb}{xrange}\PY{p}{(}\PY{n}{N\PYZus{}front}\PY{p}{)}\PY{p}{:}
+            \PY{n}{cont0} \PY{o}{=} \PY{l+m+mi}{0}
+            \PY{k}{for} \PY{n}{node\PYZus{}x} \PY{o+ow}{in} \PY{n}{COF}\PY{p}{[}\PY{n}{e}\PY{p}{]}\PY{p}{:}
+                \PY{n}{cont1} \PY{o}{=} \PY{l+m+mi}{0}
+                \PY{n}{aux} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{node\PYZus{}x}\PY{p}{)}
+                \PY{n}{f}\PY{p}{[}\PY{n}{aux}\PY{p}{]} \PY{o}{=} \PY{n}{f}\PY{p}{[}\PY{n}{aux}\PY{p}{]} \PY{o}{+} \PY{n}{FCL}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{n}{cont0}\PY{p}{]}
+                \PY{k}{for} \PY{n}{node\PYZus{}y} \PY{o+ow}{in} \PY{n}{COF}\PY{p}{[}\PY{n}{e}\PY{p}{]}\PY{p}{:}
+                    \PY{n}{i}\PY{p}{,}\PY{n}{j} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{node\PYZus{}x}\PY{p}{)}\PY{p}{,}\PY{n+nb}{int}\PY{p}{(}\PY{n}{node\PYZus{}y}\PY{p}{)}
+                    \PY{n}{K}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{K}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{n}{j}\PY{p}{]} \PY{o}{+} \PY{n}{KF}\PY{p}{[}\PY{n}{e}\PY{p}{,}\PY{n}{cont0}\PY{p}{,}\PY{n}{cont1}\PY{p}{]}
+                    \PY{n}{cont1} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+                \PY{n}{cont0} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+        
+        \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
+        \PY{c+c1}{\PYZsh{} [H] Vetor de carga global}
+        \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}\PYZsh{}}
+        
+        \PY{n}{H} \PY{o}{=} \PY{n}{h} \PY{o}{+} \PY{n}{f}
 \end{Verbatim}
 
 
@@ -610,40 +575,44 @@ com \(0\leq x\leq 10\) e \(0\leq y \leq 10\) e com condição de contorno
 \section{Solução}\label{soluuxe7uxe3o}}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}18}]:} \PY{n}{c} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{solve}\PY{p}{(}\PY{n}{K}\PY{p}{,}\PY{n}{H}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}8}]:} \PY{n}{c} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{solve}\PY{p}{(}\PY{n}{K}\PY{p}{,}\PY{n}{H}\PY{p}{)}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}19}]:} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{c}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{hlines}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{c}\PY{o}{.}\PY{n}{size}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{linestyles}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dotted}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}9}]:} \PY{n}{lettersize} \PY{o}{=} \PY{l+m+mi}{15}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{rcParams}\PY{o}{.}\PY{n}{update}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{font.size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{lettersize}\PY{p}{\PYZcb{}}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,}\PY{l+m+mi}{15}\PY{p}{)}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{c}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{hlines}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{c}\PY{o}{.}\PY{n}{size}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{linestyles}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dotted}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}19}]:} <matplotlib.collections.LineCollection at 0x115516f50>
+{\color{outcolor}Out[{\color{outcolor}9}]:} <matplotlib.collections.LineCollection at 0x112d6ea10>
 \end{Verbatim}
             
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_15_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_14_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}20}]:} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}10}]:} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,}\PY{l+m+mi}{15}\PY{p}{)}\PY{p}{)}
          \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{c}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{n}{nx}\PY{p}{,}\PY{n}{ny}\PY{p}{)}\PY{p}{,}\PY{n}{extent}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{]}\PY{p}{)}
+         \PY{n}{CS} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{contour}\PY{p}{(}\PY{n}{c}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{n}{nx}\PY{p}{,}\PY{n}{ny}\PY{p}{)}\PY{p}{,}\PY{n}{extent}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{]}\PY{p}{,}\PY{n}{colors}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{w}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{clabel}\PY{p}{(}\PY{n}{CS}\PY{p}{,}\PY{n}{inline}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{fmt}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}1.0f}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{fontsize}\PY{o}{=}\PY{n}{lettersize}\PY{p}{)}
          \PY{k}{print} \PY{n}{c}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{c}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{c}\PY{p}{)}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{n}{c}\PY{p}{)}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-0.4918978135575795 -1.3574918208538236 -1.3574918208538236 293.5041081777374
+304.74016842915347 304.7401684291536 304.7052812029308 438.3539603461486
 
     \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_16_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_15_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     

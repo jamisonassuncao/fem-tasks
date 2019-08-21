@@ -1,0 +1,28 @@
+## Formulação Fraca
+
+$$k\bigg(\frac{\partial^2T}{dx^2}+\frac{\partial^2T}{dy^2}\bigg)=-H(x,y)$$
+
+Multiplicado por $\bar{T}(x,y)$ e integrando no domínido $\Omega$
+
+$$ \iint_\Omega k\bigg(\frac{\partial^2T}{dx^2}\bar{T}+\frac{\partial^2T}{dy^2}\bar{T}\bigg)dxdy=\iint_{\Omega}-H(x,y)\bar{T}dxdy $$
+
+Integrando por partes, tem-se a formulação variacional fraca:
+$$ \int_L-q\bar{T}dL-\iint_\Omega k \bigg( \frac{\partial T}{\partial x} \frac{\partial \bar{T}}{\partial x} + \frac{\partial T}{\partial y} \frac{\partial \bar{T}}{\partial y}\bigg )dxdy = \iint_\Omega -H(x,y)\bar{T}dxdy$$
+
+onde $q=k\frac{\partial T}{\partial n}$ é o fluxo normal à borda da placa.
+
+A formulação para cada elemento triagular $\Delta^{(e)}$ e elemento linear $L^{(k)}$ será:
+
+$$ \sum_{k=1}^{N_{F}} \int_{L^{(k)}}-q\bar{T}dL-\sum_{e=1}^{N}\iint_{\Delta^{(e)}} k \bigg( \frac{\partial T}{\partial x} \frac{\partial \bar{T}}{\partial x} + \frac{\partial T}{\partial y} \frac{\partial \bar{T}}{\partial y}\bigg )dxdy = \sum_{e=1}^{N}\iint_{\Delta^{(e)}} -H(x,y)\bar{T}dxdy$$
+
+onde $N$ é o número de elementos triangulares na malha e $N_F$ é o número de elementos lineares na borda da placa.
+
+## Condição de Contorno
+
+A imposição da condição de contorno natural resulta
+
+$$A^{(k)}T(x^{(k)},y^{(k)})+q(x^{(k)},y^{(k)})=F(x^{(k)},y^{(k)})\Rightarrow -q(x,^{(k)},y^{(k)})=A^{(k)}T(x^{(k)},y^{(k)})-F(x^{(k)},y^{(k)})$$
+
+Para cada elemento de fronteira $L^{(k)}$:
+
+$$ \sum_{k=1}^{N_{F}} \int_{L^{(k)}}-q\bar{T}dL = -\sum_{k=1}^{N_{F}} \int_{L^{(k)}}-q\bar{T}dL $$
